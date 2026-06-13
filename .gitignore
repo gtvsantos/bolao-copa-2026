@@ -9,3 +9,4 @@
 # Planilhas de origem — mantidas apenas localmente, NÃO publicar
 *.xlsx
 *.csv
+.gstack/
