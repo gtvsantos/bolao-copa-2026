@@ -195,9 +195,11 @@ const AVISO_NAOCONF = "Inscrição não confirmada — Pagamento não realizado"
 const THE_SUN = "André Masetti";
 const sunIdx = DADOS.participantes.indexOf(THE_SUN);
 
-// 🃏 Palpites-meme (brincadeiras internas da turma) — registro interno; o palpite conta normal na pontuação
+// 🃏 Palpites-meme (brincadeiras internas da turma). O que está no DADOS/painel é o "meme";
+// o palpite REAL fica guardado aqui para a apuração final (restaurar antes do resultado oficial).
 const PALPITES_MEME = [
-  { participante: "André Masetti", jogoId: 44, confronto: "Espanha × Cabo Verde", palpite: "0×0", nota: "meme" }
+  { participante: "André Masetti", jogoId: 44, confronto: "Espanha × Cabo Verde", meme: "0×0", real: "3×0" },
+  { participante: "André Masetti", jogoId: 38, confronto: "Bélgica × Egito",      meme: "1×1", real: "3×0" }
 ];
 
 let eventos = [], ultimaOk = null, chart = null, proxTick = null;
