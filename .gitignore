@@ -10,3 +10,6 @@
 *.xlsx
 *.csv
 .gstack/
+
+# painel admin (ferramenta interna — não publicar no GitHub Pages)
+Bolao_Copa2026_Painel_ADMIN.html

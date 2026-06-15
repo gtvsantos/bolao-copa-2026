@@ -187,7 +187,7 @@ const porChave = {};
 DADOS.jogos.forEach(j => { porChave[j.casaEN+'|'+j.foraEN] = j; });
 
 // participantes com inscrição/pagamento NÃO confirmados: não pontuam até regularizar
-const NAO_CONFIRMADOS = new Set(["Vinicius Salgado","Henrique Velasco","Guilherme Almeida"]);
+const NAO_CONFIRMADOS = new Set([]); // todos pagaram; p/ bloquear alguém de novo: new Set(["Nome Completo"])
 const naoConf = DADOS.participantes.map(p => NAO_CONFIRMADOS.has(p));
 const AVISO_NAOCONF = "Inscrição não confirmada — Pagamento não realizado";
 
@@ -388,7 +388,7 @@ function renderRanking(A){
       <td class="num" colspan="${ncols-2}">não pontua</td>
     </tr>`;
   });
-  html += '</table><p class="legenda">☀️ <b>The Sun</b> (André Masetti, o head) reina sempre em 1º, fora da disputa. ▲▼ variação de posição desde o início do dia. "Ao vivo" é a pontuação parcial dos jogos em andamento. Aproveitamento = pontos ÷ máximo possível nos jogos encerrados. <span class="naoconf">Nomes em vermelho</span>: inscrição não confirmada — não pontuam até regularizar.</p>';
+  html += '</table><p class="legenda">☀️ <b>The Sun</b> (André Masetti, o head) reina sempre em 1º, fora da disputa. ▲▼ variação de posição desde o início do dia. "Ao vivo" é a pontuação parcial dos jogos em andamento. Aproveitamento = pontos ÷ máximo possível nos jogos encerrados.' + (ncf.length?' <span class="naoconf">Nomes em vermelho</span>: inscrição não confirmada — não pontuam até regularizar.':'') + '</p>';
   document.getElementById('pranking').innerHTML = html;
 }
 
