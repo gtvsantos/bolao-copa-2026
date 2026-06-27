@@ -13,3 +13,20 @@
 
 # painel admin (ferramenta interna — não publicar no GitHub Pages)
 Bolao_Copa2026_Painel_ADMIN.html
+
+# log de decisões / estado atual (handoff interno — não publicar)
+LOG_DECISOES.md
+ESTADO_ATUAL.md
+
+# plano da fase mata-mata (handoff interno — não publicar)
+PLANO_MATA_MATA.md
+
+# PINs do mata-mata (CONFIDENCIAL — nunca publicar)
+PINS_MATA_MATA.txt
+
+# pré-produção do mata-mata (handoff do design, SQL, protótipos — não publicar)
+preprod/
+*.zip
+
+# config local de preview (não publicar)
+.claude/
