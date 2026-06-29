@@ -345,7 +345,7 @@ body{background:#0D1B2A;color:#F2F0E9;font-family:'Barlow',system-ui,sans-serif;
     </sc-if>
 
     <footer style="margin-top:30px;color:#9FB0C3;font-size:12px;border-top:1px solid #26405F;padding-top:12px">
-      Pontuação por fase — <b style="color:#F2F0E9">Grupos:</b> 5 exato · 3 saldo/empate · 2 vencedor · 0 erro. <b style="color:#F2F0E9">16-avos e oitavas:</b> 8 · 5 · 3 · 0. <b style="color:#F2F0E9">Quartas em diante:</b> 11 · 7 · 5 · 0. <b style="color:#FFC72C">Especiais:</b> campeão 25 · vice 15 · 3º 10 · 4º 10. Tudo soma num ranking só. Fonte do placar: site.api.espn.com.
+      Pontuação por fase — <b style="color:#F2F0E9">Grupos:</b> 5 exato · 3 saldo/empate · 2 vencedor · 0 erro. <b style="color:#F2F0E9">16-avos e oitavas:</b> 8 · 5 · 3 · 0. <b style="color:#F2F0E9">Quartas em diante:</b> 11 · 7 · 5 · 0. <b style="color:#FFC72C">Especiais:</b> campeão 25 · vice 15 · 3º 10 · 4º 10. Tudo soma num ranking só. <b style="color:#F2F0E9">Empate:</b> quem cravou mais (placares exatos). Fonte do placar: site.api.espn.com.
     </footer>
   </div>
 
@@ -835,8 +835,9 @@ class Component extends DCLogic {
   _toggle(id){ this.setState(s=>({expanded:{...s.expanded,[id]:!s.expanded[id]}})); }
 
   rankingVM(A){
-    const P=this.parts(); const conf=P.map((_,i)=>i).sort((a,b)=>A.tot[b]-A.tot[a]||P[a].localeCompare(P[b]));
-    const posAgora=this._posic(conf,i=>A.tot[i]); const posAntes=this._posic(conf,i=>A.totAntes[i]);
+    // desempate: 1º pontos, 2º quem CRAVOU mais (placares exatos), 3º nome
+    const P=this.parts(); const conf=P.map((_,i)=>i).sort((a,b)=>A.tot[b]-A.tot[a]||A.exatos[b]-A.exatos[a]||P[a].localeCompare(P[b]));
+    const posAgora=this._posic(conf,i=>A.tot[i],i=>A.exatos[i]); const posAntes=this._posic(conf,i=>A.totAntes[i]);
     const temVivo=conf.some(i=>A.prov[i]>0);
     const rows=conf.map(i=>{
       const dv=posAntes[i]-posAgora[i];
@@ -849,12 +850,12 @@ class Component extends DCLogic {
     });
     return {rows,temVivo};
   }
-  _posic(indices,val){ const ord=[...indices].sort((a,b)=>val(b)-val(a)); const pos={}; ord.forEach((i,k)=>{ pos[i]=(k>0&&val(i)===val(ord[k-1]))?pos[ord[k-1]]:k+1; }); return pos; }
+  _posic(indices,val,val2){ const ord=[...indices].sort((a,b)=>val(b)-val(a)||(val2?val2(b)-val2(a):0)); const pos={}; ord.forEach((i,k)=>{ pos[i]=(k>0&&val(i)===val(ord[k-1])&&(!val2||val2(i)===val2(ord[k-1])))?pos[ord[k-1]]:k+1; }); return pos; }
 
   stripVM(A){
     const P=this.parts(); const box="background:#13243A;border:1px solid #26405F;border-left:4px solid #1B7A3D;padding:12px 14px;border-radius:4px";
     const boxLive="background:#13243A;border:1px solid #26405F;border-left:4px solid #E5383B;padding:12px 14px;border-radius:4px";
-    let lider=-1,best=-1; P.forEach((_,i)=>{ if(A.tot[i]>best){best=A.tot[i];lider=i;} });
+    let lider=-1; P.forEach((_,i)=>{ if(lider<0||A.tot[i]>A.tot[lider]||(A.tot[i]===A.tot[lider]&&A.exatos[i]>A.exatos[lider])){lider=i;} });
     const vivo=this.eventos.filter(e=>e.estado==='in'); const prox=this.eventos.filter(e=>e.estado==='pre').sort((a,b)=>new Date(a.data)-new Date(b.data));
     const maxHoje=Math.max(0,...A.hojeArr); const craques=maxHoje>0?P.filter((_,i)=>A.hojeArr[i]===maxHoje):[];
     const totExatos=A.exatos.reduce((a,b)=>a+b,0);
